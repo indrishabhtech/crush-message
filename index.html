@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secret Messages for You 💕</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Animated Background Hearts */
+        .hearts-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            animation: float 8s infinite ease-in-out;
+            opacity: 0.3;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0.3;
+            }
+            50% {
+                transform: translateY(-100px) rotate(180deg);
+                opacity: 0.6;
+            }
+        }
+
+        /* Container */
+        .container {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-top: 40px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        header h1 {
+            font-family: 'Lobster', cursive;
+            font-size: 3.5em;
+            color: white;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2em;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 300;
+        }
+
+        /* Tab Navigation */
+        .tab-container {
+            display: flex;
+            gap: 20px;
+            margin: 40px 0;
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        .tab-btn {
+            padding: 15px 35px;
+            font-size: 18px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            cursor: pointer;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .tab-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #ff6b9d, #c06c84);
+            border-color: #ff6b9d;
+            transform: scale(1.05);
+        }
+
+        /* Content Cards */
+        .content-section {
+            width: 100%;
+            max-width: 600px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.6s ease-out;
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .section-title {
+            font-family: 'Lobster', cursive;
+            font-size: 2.2em;
+            color: #c06c84;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 0.95em;
+        }
+
+        /* Input Areas */
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: #555;
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            font-size: 16px;
+            font-family: 'Poppins', sans-serif;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            resize: vertical;
+            transition: all 0.3s ease;
+            background: #f9f9f9;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #ff6b9d;
+            background: white;
+            box-shadow: 0 0 15px rgba(255, 107, 157, 0.2);
+        }
+
+        /* Buttons */
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 25px;
+        }
+
+        .btn {
+            padding: 14px 30px;
+            font-size: 16px;
+            background: linear-gradient(135deg, #ff6b9d, #c06c84);
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 107, 157, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 107, 157, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Output Display */
+        .output-box {
+            margin-top: 25px;
+            padding: 20px;
+            background: linear-gradient(135deg, #ffeef8, #fff0f6);
+            border-radius: 15px;
+            border-left: 4px solid #ff6b9d;
+            min-height: 60px;
+            word-wrap: break-word;
+            animation: fadeIn 0.5s ease-out;
+            display: none;
+        }
+
+        .output-box.show {
+            display: block;
+        }
+
+        .output-box.success {
+            background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
+            border-left-color: #66bb6a;
+        }
+
+        .output-label {
+            font-weight: 600;
+            color: #c06c84;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+        }
+
+        .output-text {
+            color: #333;
+            line-height: 1.6;
+            font-size: 0.95em;
+        }
+
+        /* Fun Features Section */
+        .features {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            background: #fff;
+            transform: translateX(5px);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .feature-icon {
+            font-size: 24px;
+        }
+
+        .feature-text {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            color: white;
+            padding: 30px;
+            animation: fadeIn 2s ease-out;
+        }
+
+        footer p {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Notification Toast */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #66bb6a, #43a047);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(100px);
+            transition: all 0.4s ease;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2.5em;
+            }
+
+            header p {
+                font-size: 1em;
+            }
+
+            .tab-container {
+                flex-direction: column;
+                width: 100%;
+                max-width: 400px;
+            }
+
+            .tab-btn {
+                width: 100%;
+            }
+
+            .content-section {
+                padding: 25px;
+            }
+
+            .section-title {
+                font-size: 1.8em;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .toast {
+                bottom: 20px;
+                right: 20px;
+                left: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 2em;
+            }
+
+            .content-section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="hearts-bg" id="heartsContainer"></div>
+
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>💕 Secret Messages 💕</h1>
+            <p>For someone special... 🥰</p>
+        </header>
+
+        <!-- Tab Navigation -->
+        <div class="tab-container">
+            <button class="tab-btn active" onclick="switchTab('encrypt')">
+                ✉️ Encrypt
+            </button>
+            <button class="tab-btn" onclick="switchTab('decrypt')">
+                🔓 Decrypt
+            </button>
+            <button class="tab-btn" onclick="switchTab('about')">
+                💖 About
+            </button>
+        </div>
+
+        <!-- Encrypt Section -->
+        <div class="content-section active" id="encrypt-section">
+            <h2 class="section-title">Create Secret Message</h2>
+            <p class="section-subtitle">Write something sweet and encrypt it! 💌</p>
+
+            <div class="input-group">
+                <label>Your Message:</label>
+                <textarea id="message" placeholder="Hey! I've been thinking about you... 😊"></textarea>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn" onclick="encryptMessage()">🔒 Encrypt</button>
+                <button class="btn btn-secondary" onclick="copyEncrypted()">📋 Copy</button>
+                <button class="btn btn-secondary" onclick="clearEncrypt()">🗑️ Clear</button>
+            </div>
+
+            <div class="output-box" id="encrypt-output">
+                <div class="output-label">Encrypted Message:</div>
+                <div class="output-text" id="encrypted-text"></div>
+            </div>
+
+            <div class="features">
+                <div class="feature-item">
+                    <span class="feature-icon">🔐</span>
+                    <span class="feature-text">Your message is encoded using Base64 encryption</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">💝</span>
+                    <span class="feature-text">Share the encrypted message with your special someone</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">🎭</span>
+                    <span class="feature-text">Keep your feelings secret until they decode it!</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Decrypt Section -->
+        <div class="content-section" id="decrypt-section">
+            <h2 class="section-title">Read Secret Message</h2>
+            <p class="section-subtitle">Decode the encrypted message to reveal it! 🎁</p>
+
+            <div class="input-group">
+                <label>Encrypted Message:</label>
+                <textarea id="encryptedMessage" placeholder="Paste the encrypted message here..."></textarea>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn" onclick="decryptMessage()">🔓 Decrypt</button>
+                <button class="btn btn-secondary" onclick="clearDecrypt()">🗑️ Clear</button>
+            </div>
+
+            <div class="output-box success" id="decrypt-output">
+                <div class="output-label">Decrypted Message:</div>
+                <div class="output-text" id="decrypted-text"></div>
+            </div>
+
+            <div class="features">
+                <div class="feature-item">
+                    <span class="feature-icon">🎉</span>
+                    <span class="feature-text">Discover what your crush wanted to tell you!</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">💬</span>
+                    <span class="feature-text">The message is safe and only visible to you</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">😊</span>
+                    <span class="feature-text">Reply back with your own encrypted message!</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- About Section -->
+        <div class="content-section" id="about-section">
+            <h2 class="section-title">About This Tool</h2>
+            <p class="section-subtitle">Made with love 💕</p>
+
+            <div class="features">
+                <div class="feature-item">
+                    <span class="feature-icon">💌</span>
+                    <span class="feature-text">This tool helps you send secret messages to your crush in a fun way!</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">🎨</span>
+                    <span class="feature-text">Beautiful design with smooth animations and effects</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">📱</span>
+                    <span class="feature-text">Works perfectly on mobile phones and tablets</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">🔒</span>
+                    <span class="feature-text">Simple Base64 encryption - fun but not for serious security</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">✨</span>
+                    <span class="feature-text">Share encrypted messages via text, WhatsApp, or any app!</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">💖</span>
+                    <span class="feature-text">Make your conversations more exciting and mysterious!</span>
+                </div>
+            </div>
+
+            <div style="margin-top: 30px; text-align: center; color: #666;">
+                <p style="font-size: 1.2em; margin-bottom: 10px;">💡 Pro Tip</p>
+                <p style="font-size: 0.9em;">Send your crush the encrypted message and tell them to visit this page to decrypt it. It's a unique way to break the ice! 😉</p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>Made with 💕 for someone special</p>
+            <p style="margin-top: 10px; font-size: 0.8em;">Every message tells a story... what's yours? ✨</p>
+        </footer>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // Create floating hearts background
+        function createHearts() {
+            const container = document.getElementById('heartsContainer');
+            const hearts = ['💕', '💖', '💗', '💓', '💝', '❤️', '🥰', '😍'];
+            
+            for (let i = 0; i < 15; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.top = Math.random() * 100 + '%';
+                heart.style.animationDelay = Math.random() * 8 + 's';
+                heart.style.animationDuration = (Math.random() * 4 + 6) + 's';
+                container.appendChild(heart);
+            }
+        }
+
+        // Tab switching
+        function switchTab(tab) {
+            // Update tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Update content sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(tab + '-section').classList.add('active');
+        }
+
+        // Encrypt Message
+        function encryptMessage() {
+            const message = document.getElementById('message').value.trim();
+            
+            if (!message) {
+                showToast('⚠️ Please write a message first!', 'warning');
+                return;
+            }
+
+            const encrypted = btoa(unescape(encodeURIComponent(message)));
+            document.getElementById('encrypted-text').textContent = encrypted;
+            document.getElementById('encrypt-output').classList.add('show');
+            showToast('✅ Message encrypted successfully!');
+        }
+
+        // Decrypt Message
+        function decryptMessage() {
+            const encryptedMessage = document.getElementById('encryptedMessage').value.trim();
+            
+            if (!encryptedMessage) {
+                showToast('⚠️ Please paste an encrypted message first!', 'warning');
+                return;
+            }
+
+            try {
+                const decrypted = decodeURIComponent(escape(atob(encryptedMessage)));
+                document.getElementById('decrypted-text').textContent = decrypted;
+                document.getElementById('decrypt-output').classList.add('show');
+                showToast('✅ Message decrypted successfully!');
+            } catch (e) {
+                showToast('❌ Invalid encrypted message!', 'error');
+            }
+        }
+
+        // Copy encrypted message
+        function copyEncrypted() {
+            const text = document.getElementById('encrypted-text').textContent;
+            
+            if (!text) {
+                showToast('⚠️ Nothing to copy! Encrypt a message first.', 'warning');
+                return;
+            }
+
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('📋 Copied to clipboard!');
+            });
+        }
+
+        // Clear functions
+        function clearEncrypt() {
+            document.getElementById('message').value = '';
+            document.getElementById('encrypted-text').textContent = '';
+            document.getElementById('encrypt-output').classList.remove('show');
+        }
+
+        function clearDecrypt() {
+            document.getElementById('encryptedMessage').value = '';
+            document.getElementById('decrypted-text').textContent = '';
+            document.getElementById('decrypt-output').classList.remove('show');
+        }
+
+        // Toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            
+            if (type === 'warning') {
+                toast.style.background = 'linear-gradient(135deg, #ffa726, #fb8c00)';
+            } else if (type === 'error') {
+                toast.style.background = 'linear-gradient(135deg, #ef5350, #e53935)';
+            } else {
+                toast.style.background = 'linear-gradient(135deg, #66bb6a, #43a047)';
+            }
+            
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Initialize
+        createHearts();
+
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey || e.metaKey) {
+                if (e.key === 'Enter') {
+                    const activeSection = document.querySelector('.content-section.active');
+                    if (activeSection.id === 'encrypt-section') {
+                        encryptMessage();
+                    } else if (activeSection.id === 'decrypt-section') {
+                        decryptMessage();
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
